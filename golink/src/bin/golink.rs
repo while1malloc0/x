@@ -8,9 +8,14 @@ fn index() -> Template {
     Template::render("index", ())
 }
 
+#[get("/admin")]
+fn admin() -> Template {
+    Template::render("admin", ())
+}
+
 #[launch()]
 fn rocket() -> _ {
     rocket::build()
-        .mount("/", routes![index])
+        .mount("/", routes![index, admin])
         .attach(Template::fairing())
 }
