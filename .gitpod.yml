@@ -1,6 +1,7 @@
 vscode:
   extensions:
     - swellaby.rust-pack
+    - karunamurti.tera
 
 ports:
   - port: 8000
