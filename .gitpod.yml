@@ -3,5 +3,5 @@ vscode:
     - swellaby.rust-pack
 
 ports:
-  - port: 3000
+  - port: 8000
     onOpen: open-preview
