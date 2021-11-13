@@ -1,0 +1,7 @@
+vscode:
+  extensions:
+    - swellaby.rust-pack
+
+ports:
+  - port: 3000
+    onOpen: open-preview
