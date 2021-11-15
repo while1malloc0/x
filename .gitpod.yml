@@ -6,6 +6,7 @@ vscode:
   extensions:
     - swellaby.rust-pack
     - karunamurti.tera
+    - ms-azuretools.vscode-docker
 
 ports:
   - port: 8000
