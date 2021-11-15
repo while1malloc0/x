@@ -2,4 +2,4 @@
 
 cd "$(dirname "$0")/.." || exit
 
-cargo run 
+railway run cargo run 
