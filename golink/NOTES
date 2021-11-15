@@ -1,0 +1,6 @@
+TODO:
+- Add diesel migration embedding
+- Add login functionality
+- Add request guard for authed users
+- Add tailwind and make admin forms pretty
+- Add link redirects
