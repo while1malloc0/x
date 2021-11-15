@@ -1,3 +1,6 @@
 {% extends "base" %}
 {% block content %}
+{% for user in users %}
+<li>{{ user.email }}</li>
+{% endfor %}
 {% endblock content %}
