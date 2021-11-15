@@ -1,6 +1,6 @@
 tasks:
   - name: install railway
-    before: npm i -g @railway/cli
+    command: npm i -g @railway/cli
 
 vscode:
   extensions:
