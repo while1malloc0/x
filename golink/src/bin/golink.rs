@@ -16,9 +16,8 @@ fn main() {
             "/",
             routes![
                 routes::index,
-                routes::admin,
-                routes::healthz,
-                routes::admin_list_users
+                routes::probe::healthz,
+                routes::admin::list_users,
             ],
         )
         .attach(Template::fairing())
