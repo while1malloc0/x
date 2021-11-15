@@ -2,6 +2,9 @@ tasks:
   - name: install railway
     command: npm i -g @railway/cli
 
+  - name: set rust default
+    command: rustup default nightly
+
 vscode:
   extensions:
     - swellaby.rust-pack
