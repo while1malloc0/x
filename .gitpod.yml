@@ -1,3 +1,7 @@
+tasks:
+  - name: install railway
+    before: npm i -g @railway/cli
+
 vscode:
   extensions:
     - swellaby.rust-pack
