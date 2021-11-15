@@ -1,4 +1,3 @@
-#[feature(proc_macro_hygiene, decl_macro)]
 #[macro_use]
 extern crate rocket;
 #[macro_use]
@@ -7,7 +6,6 @@ extern crate diesel;
 extern crate golink;
 
 use golink::routes;
-// use rocket_contrib::databases::diesel;
 use rocket_contrib::templates::Template;
 
 #[database("golink")]
