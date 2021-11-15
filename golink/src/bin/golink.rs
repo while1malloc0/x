@@ -1,28 +1,24 @@
+#[feature(proc_macro_hygiene, decl_macro)]
 #[macro_use]
 extern crate rocket;
+#[macro_use]
+extern crate rocket_contrib;
+extern crate diesel;
+extern crate golink;
 
-use rocket_dyn_templates::Template;
-use std::collections::HashMap;
+use golink::routes;
+// use rocket_contrib::databases::diesel;
+use rocket_contrib::templates::Template;
 
-#[get("/")]
-fn index() -> Template {
-    let context: HashMap<String, String> = HashMap::new();
-    Template::render("index", context)
-}
+#[database("golink")]
+pub struct DBConn(diesel::PgConnection);
 
-#[get("/admin")]
-fn admin() -> Template {
-    Template::render("admin", ())
-}
+fn main() {
+    // let database_url = env::var("DATABASE_URL").expect("DATABASE_URL not set");
+    // let conn = PgConnection::establish(&database_url).expect("Error connecting to database");
 
-#[get("/healthz")]
-fn healthz() -> &'static str {
-    "ok"
-}
-
-#[launch()]
-fn rocket() -> _ {
-    rocket::build()
-        .mount("/", routes![index, admin, healthz])
+    rocket::ignite()
+        .mount("/", routes![routes::index, routes::admin, routes::healthz])
         .attach(Template::fairing())
+        .launch();
 }
