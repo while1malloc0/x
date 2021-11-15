@@ -5,18 +5,18 @@ extern crate rocket_contrib;
 extern crate diesel;
 extern crate golink;
 
-use golink::routes;
+use golink::{config::config, routes};
 use rocket_contrib::templates::Template;
 
-#[database("golink")]
+#[database("railway")]
 pub struct DBConn(diesel::PgConnection);
 
 fn main() {
-    // let database_url = env::var("DATABASE_URL").expect("DATABASE_URL not set");
-    // let conn = PgConnection::establish(&database_url).expect("Error connecting to database");
+    let config = config().unwrap();
 
-    rocket::ignite()
+    rocket::custom(config)
         .mount("/", routes![routes::index, routes::admin, routes::healthz])
         .attach(Template::fairing())
+        .attach(DBConn::fairing())
         .launch();
 }
