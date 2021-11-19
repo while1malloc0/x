@@ -1,3 +1,6 @@
+use crate::DBConn;
+use rocket::request::Form;
+use rocket::response::Redirect;
 use rocket_contrib::templates::Template;
 use std::collections::HashMap;
 
@@ -11,6 +14,20 @@ pub fn index() -> Template {
 pub fn login() -> Template {
     let context: HashMap<String, String> = HashMap::new();
     Template::render("login", context)
+}
+
+#[derive(FromForm, Debug)]
+pub struct AuthForm {
+    #[allow(dead_code)]
+    username: String,
+    #[allow(dead_code)]
+    password: String,
+}
+
+#[post("/login", data = "<auth_form>")]
+pub fn login_post(conn: DBConn, auth_form: Form<AuthForm>) -> Redirect {
+    println!("{:?}", auth_form);
+    Redirect::found("/")
 }
 
 pub mod probe {

@@ -38,6 +38,8 @@ fn main() {
                 routes::index,
                 routes::probe::healthz,
                 routes::admin::list_users,
+                routes::login,
+                routes::login_post,
             ],
         )
         .attach(Template::fairing())
