@@ -22,12 +22,17 @@ pub struct AuthForm {
     username: String,
     #[allow(dead_code)]
     password: String,
+    return_to: String,
 }
 
 #[post("/login", data = "<auth_form>")]
 pub fn login_post(conn: DBConn, auth_form: Form<AuthForm>) -> Redirect {
     println!("{:?}", auth_form);
-    Redirect::found("/")
+    let mut destination = auth_form.return_to.clone();
+    if destination == "" {
+        destination = "/".to_string();
+    }
+    Redirect::found(destination)
 }
 
 pub mod probe {

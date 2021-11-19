@@ -6,5 +6,13 @@
     <label for="password">Password</label>
     <input id="password" name="password" type="password" placeholder="password" required />
     <input type="submit" value="Submit" />
+    <input type="hidden" id="login_return_to" name="return_to" value="" />
 </form>
+
+<!-- this isn't a great way to do this, but it works for now -->
+<script>
+    let params = new URLSearchParams(window.location.search);
+    let destination = params.get("return_to");
+    document.getElementById("login_return_to").setAttribute("value", destination);
+</script>
 {% endblock content %}
