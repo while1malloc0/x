@@ -5,6 +5,9 @@ tasks:
   - name: set rust default
     command: rustup default nightly
 
+  - name: install rust tools
+    command: rustup component add rust-analysis rust-src rls clippy
+
 vscode:
   extensions:
     - swellaby.rust-pack
