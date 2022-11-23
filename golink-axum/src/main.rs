@@ -2,10 +2,16 @@ use axum::{
     routing::get,
     Router,
 };
+use sea_orm::Database;
 use std::net::SocketAddr;
+use std::env;
 
 #[tokio::main]
 async fn main() {
+    let db_url = env::var("DATABASE_URL").expect("DATABASE_URL not set");
+    let db = Database::connect(db_url).await.expect("could not connect to DB");
+    println!("{:?}", db);
+
     // build our application with a route
     let app = Router::new()
         // `GET /` goes to `root`
