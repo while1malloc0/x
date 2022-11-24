@@ -1,8 +1,9 @@
 use axum::{
     routing::get,
     Router,
+    extract::Extension
 };
-use sea_orm::Database;
+use sea_orm::{Database, DatabaseConnection};
 use std::net::SocketAddr;
 use std::env;
 
@@ -10,12 +11,12 @@ use std::env;
 async fn main() {
     let db_url = env::var("DATABASE_URL").expect("DATABASE_URL not set");
     let db = Database::connect(db_url).await.expect("could not connect to DB");
-    println!("{:?}", db);
 
     // build our application with a route
     let app = Router::new()
         // `GET /` goes to `root`
-        .route("/", get(root));
+        .route("/", get(root))
+        .layer(Extension(db));
 
     // run our app with hyper
     // `axum::Server` is a re-export of `hyper::Server`
@@ -27,6 +28,6 @@ async fn main() {
 }
 
 // basic handler that responds with a static string
-async fn root() -> &'static str {
-    "Hello, World!"
+async fn root(Extension(db): Extension<DatabaseConnection>) -> String {
+    format!("{:?}", db)
 }
