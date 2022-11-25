@@ -2,7 +2,8 @@ use axum::{
     routing::get,
     Router,
     extract::{Extension, Path},
-    response::Redirect
+    response::{Redirect, Response, IntoResponse},
+    http::StatusCode
 };
 use std::net::SocketAddr;
 use std::env;
@@ -35,12 +36,14 @@ async fn root() -> String {
     "working".to_string()
 }
 
-async fn shortcode_redirect_handler(Extension(db_pool): Extension<SqlitePool>, Path(shortcode): Path<String>) -> Redirect {
+async fn shortcode_redirect_handler(Extension(db_pool): Extension<SqlitePool>, Path(shortcode): Path<String>) -> Response {
     let mut conn = db_pool.acquire().await.expect("could not connect to DB");
     let result = sqlx::query_as::<_, Link>("SELECT * FROM links WHERE shortcode = $1")
-        .bind(shortcode)
+        .bind(&shortcode)
         .fetch_one(&mut conn)
-        .await
-        .expect("could not find link");
-    Redirect::permanent(&result.target)
+        .await;
+    match result {
+        Ok(res) => Redirect::permanent(&res.target).into_response(),
+        Err(_) => (StatusCode::NOT_FOUND, format!("no target found for {:?}", &shortcode)).into_response()
+    } 
 }
