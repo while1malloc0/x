@@ -3,14 +3,20 @@ use axum::{
     Router,
     extract::{Extension, Path}
 };
-use sea_orm::{Database};
 use std::net::SocketAddr;
 use std::env;
+use sqlx::sqlite::SqlitePool;
+
+#[derive(sqlx::FromRow)]
+struct Link {
+    shortcode: String,
+    target: String,
+}
 
 #[tokio::main]
 async fn main() {
     let db_url = env::var("DATABASE_URL").expect("DATABASE_URL not set");
-    let db = Database::connect(db_url).await.expect("could not connect to DB");
+    let db = SqlitePool::connect(&db_url).await.expect("could not connect to DB");
 
     let app = Router::new()
         .route("/", get(root))
@@ -28,6 +34,12 @@ async fn root() -> String {
     "working".to_string()
 }
 
-async fn shortcode_redirect_handler(Path(shortcode): Path<String>) -> String {
-    shortcode
+async fn shortcode_redirect_handler(Extension(db_pool): Extension<SqlitePool>, Path(shortcode): Path<String>) -> String {
+    let mut conn = db_pool.acquire().await.expect("could not connect to DB");
+    let result = sqlx::query_as::<_, Link>("SELECT * FROM links WHERE shortcode = $1")
+        .bind(shortcode)
+        .fetch_one(&mut conn)
+        .await
+        .expect("could not find link");
+    result.target
 }
