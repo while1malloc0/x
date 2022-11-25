@@ -33,7 +33,7 @@ async fn main() {
 }
 
 async fn root() -> String {
-    "working".to_string()
+    "welcome to the link shortener".to_string()
 }
 
 async fn shortcode_redirect_handler(Extension(db_pool): Extension<SqlitePool>, Path(shortcode): Path<String>) -> Response {
