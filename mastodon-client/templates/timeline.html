@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Timeline</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <nav>
+                <ul>
+                    <li><a href="#" role="button">Settings</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            {% for toot in toots %}
+            <article>
+                <header>{{ toot.account.display_name }} ({{ toot.account.acct }})</header>
+                {{ get_content(toot) | safe }}
+                {% if (toot.media_attachments | length) > 0 %}
+                {% for attachment in toot.media_attachments %}
+                <img src="{{ attachment.url }}" />
+                {% endfor %}
+                {% endif %}
+                {% if is_reply(toot) %}
+                <footer>Replying to {{ get_in_reply_to(toot) }}</footer>
+                {% endif %}
+            </article>
+            {% endfor %}
+        </main>
+    </div>
+</body>
+
+</html>
