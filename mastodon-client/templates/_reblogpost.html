@@ -1,0 +1,10 @@
+<article>
+    <header>{{ toot.account.display_name }} ({{ toot.account.acct }}) reblogged</header>
+    <article>
+        <header>{{toot.reblog.account.display_name }} ({{ toot.reblog.account.acct }})</header>
+        {% include "_postcontent.html" %}
+    </article>
+    <footer>
+        {% include "_postbuttons.html" %}
+    </footer>
+</article>

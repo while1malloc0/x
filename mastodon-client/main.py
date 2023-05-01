@@ -1,8 +1,9 @@
 import os
 from typing import Any, Optional
+from logging import info as log_info
 
 from dotenv import load_dotenv
-from flask import Flask, redirect, render_template
+from flask import Flask, redirect, render_template, request
 from mastodon import Mastodon
 
 load_dotenv()
@@ -14,7 +15,11 @@ mastodon = Mastodon(
     client_secret=os.environ["MASTODON_CLIENT_SECRET"],
     api_base_url="https://hachyderm.io",
 )
-mastodon.log_in("johnturner@me.com", os.environ["MASTODON_PASSWORD"], scopes=["read"])
+mastodon.log_in(
+    "johnturner@me.com",
+    os.environ["MASTODON_PASSWORD"],
+    scopes=["read", "write:statuses"],
+)
 
 running_timeline = []
 
@@ -28,6 +33,31 @@ def timeline() -> str:
     return render_template("timeline.html", toots=running_timeline)
 
 
+@app.get("/reply/<post_id>")
+def reply_to(post_id) -> str:
+    return render_template("_reply.html", post_id=post_id)
+
+
+@app.post("/reply/<post_id>")
+def reply_to_post(post_id) -> str:
+    original = mastodon.status(post_id)
+    reply_text = request.form["content"]
+    replied = mastodon.status_reply(original, reply_text)
+    log_info(replied)
+    if request.headers.get("Hx-Request", None):
+        return '<div id="reply-modal"></div>'
+    return redirect("/timeline")
+
+
+@app.post("/reblog/<post_id>")
+def reblog_post(post_id) -> str:
+    status = mastodon.status_reblog(post_id)
+    log_info(status)
+    if request.headers.get("Hx-Request", None):
+        return "<button disabled>Reblogged</button>"
+    return redirect("/timeline")
+
+
 @app.template_global("get_content")
 def get_content(toot) -> str:
     if toot.reblog is not None:
@@ -38,6 +68,11 @@ def get_content(toot) -> str:
 @app.template_global("is_reply")
 def is_reply(toot):
     return toot.in_reply_to_id is not None
+
+
+@app.template_global("is_reblog")
+def is_reblog(toot):
+    return toot.reblog is not None
 
 
 @app.template_global("get_in_reply_to")

@@ -1,0 +1,6 @@
+{{ get_content(toot) | safe }}
+{% if (toot.reblog.media_attachments | length) > 0 %}
+{% for attachment in toot.reblog.media_attachments %}
+<img src="{{ attachment.url }}" />
+{% endfor %}
+{% endif %}

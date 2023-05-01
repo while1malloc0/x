@@ -1,0 +1,6 @@
+<dialog open>
+    <form>
+        <input type="text" name="content">
+        <button type="submit" hx-post="/reply/{{post_id}}" hx-target="#reply-modal" hx-swap="outerHTML">Reply</button>
+    </form>
+</dialog>
