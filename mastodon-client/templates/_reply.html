@@ -1,6 +1,12 @@
-<dialog open>
-    <form>
-        <input type="text" name="content">
-        <button type="submit" hx-post="/reply/{{post_id}}" hx-target="#reply-modal" hx-swap="outerHTML">Reply</button>
-    </form>
+<dialog id="reply-modal">
+    <article style="width: 75%; height: 50%">
+        <form>
+            <textarea name="content" style="resize: none"></textarea>
+            <div class="grid">
+                <button _="on click remove @open from #reply-modal">Cancel</button>
+                <button type="submit" hx-post="/reply/{{post_id}}" hx-target="#reply-modal"
+                    hx-swap="outerHTML">Reply</button>
+            </div>
+        </form>
+    </article>
 </dialog>

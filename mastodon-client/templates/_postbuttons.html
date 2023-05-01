@@ -1,5 +1,5 @@
 <div class="grid">
-    <button hx-get="/reply/{{toot.id}}" hx-target="#reply-modal">Reply</button>
+    <button _="on click add @open to #reply-modal">Reply</button>
     <button hx-post="/reblog/{{toot.id}}" hx-trigger="click delay:500ms" hx-swap="outerHTML"
         _="on click set @aria-busy to true">Reblog</button>
     <button>Favorite</button>

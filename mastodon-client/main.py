@@ -33,11 +33,6 @@ def timeline() -> str:
     return render_template("timeline.html", toots=running_timeline)
 
 
-@app.get("/reply/<post_id>")
-def reply_to(post_id) -> str:
-    return render_template("_reply.html", post_id=post_id)
-
-
 @app.post("/reply/<post_id>")
 def reply_to_post(post_id) -> str:
     original = mastodon.status(post_id)

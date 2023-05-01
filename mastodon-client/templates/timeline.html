@@ -21,7 +21,7 @@
             </nav>
         </header>
         <main>
-            <div id="reply-modal"></div>
+            {% include "_reply.html" %}
             {% for toot in toots %}
 
             {% if is_reply(toot) %}
