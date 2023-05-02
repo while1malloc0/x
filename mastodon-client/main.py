@@ -18,7 +18,7 @@ mastodon = Mastodon(
 mastodon.log_in(
     "johnturner@me.com",
     os.environ["MASTODON_PASSWORD"],
-    scopes=["read", "write:statuses"],
+    scopes=["read", "write:statuses", "write:favourites", "write:bookmarks"],
 )
 
 running_timeline = []
@@ -44,12 +44,37 @@ def reply_to_post(post_id) -> str:
     return redirect("/timeline")
 
 
+@app.post("/posts")
+def post_to_mastodon():
+    content = request.form["content"]
+    mastodon.status_post(content)
+    return redirect("/timeline")
+
+
 @app.post("/reblog/<post_id>")
 def reblog_post(post_id) -> str:
     status = mastodon.status_reblog(post_id)
     log_info(status)
     if request.headers.get("Hx-Request", None):
         return "<button disabled>Reblogged</button>"
+    return redirect("/timeline")
+
+
+@app.post("/favorite/<post_id>")
+def favorite_post(post_id) -> str:
+    status = mastodon.status_favourite(post_id)
+    log_info(status)
+    if request.headers.get("Hx-Request", None):
+        return "<button disabled>Favorited</button>"
+    return redirect("/timeline")
+
+
+@app.post("/bookmark/<post_id>")
+def bookmark_post(post_id) -> str:
+    status = mastodon.status_bookmark(post_id)
+    log_info(status)
+    if request.headers.get("Hx-Request", None):
+        return "<button disabled>Bookmarked</button>"
     return redirect("/timeline")
 
 

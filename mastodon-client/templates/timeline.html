@@ -17,11 +17,13 @@
             <nav>
                 <ul>
                     <li><a href="#" role="button">Settings</a></li>
+                    <li><a href="#" role="button" _="on click add @open to #post-modal">Post</a></li>
                 </ul>
             </nav>
         </header>
         <main>
             {% include "_reply.html" %}
+            {% include "_post.html" %}
             {% for toot in toots %}
 
             {% if is_reply(toot) %}

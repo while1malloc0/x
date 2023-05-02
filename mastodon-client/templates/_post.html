@@ -1,0 +1,12 @@
+<dialog id="post-modal">
+    <article style="width: 75%; height: 50%">
+        <form>
+            <textarea name="content" style="resize: none"></textarea>
+            <div class="grid">
+                <button _="on click remove @open from #post-modal">Cancel</button>
+                <button hx-post="/posts" hx-trigger="click delay:500"
+                    _="on click remove @open from #post-modal">Post</button>
+            </div>
+        </form>
+    </article>
+</dialog>

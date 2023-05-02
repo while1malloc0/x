@@ -2,6 +2,8 @@
     <button _="on click add @open to #reply-modal">Reply</button>
     <button hx-post="/reblog/{{toot.id}}" hx-trigger="click delay:500ms" hx-swap="outerHTML"
         _="on click set @aria-busy to true">Reblog</button>
-    <button>Favorite</button>
-    <button>Bookmark</button>
+    <button hx-post="/favorite/{{toot.id}}" hx-trigger="click delay:500ms" hx-swap="outerHTML"
+        _="on click set @aria-busy to true">Favorite</button>
+    <button hx-post="/bookmark/{{toot.id}}" hx-trigger="click delay:500ms" hx-swap="outerHTML"
+        _="on click set @aria-busy to true">Bookmark</button>
 </div>
