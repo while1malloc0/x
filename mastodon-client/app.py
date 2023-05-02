@@ -1,10 +1,11 @@
 import os
-from typing import Any, Optional
+from typing import Any, Union
 from logging import info as log_info
 
 from dotenv import load_dotenv
 from flask import Flask, redirect, render_template, request
 from mastodon import Mastodon
+from werkzeug.wrappers import Response
 
 load_dotenv()
 
@@ -34,7 +35,7 @@ def timeline() -> str:
 
 
 @app.post("/reply/<post_id>")
-def reply_to_post(post_id) -> str:
+def reply_to_post(post_id) -> Union[str, Response]:
     original = mastodon.status(post_id)
     reply_text = request.form["content"]
     replied = mastodon.status_reply(original, reply_text)
@@ -45,14 +46,14 @@ def reply_to_post(post_id) -> str:
 
 
 @app.post("/posts")
-def post_to_mastodon():
+def post_to_mastodon() -> Response:
     content = request.form["content"]
     mastodon.status_post(content)
     return redirect("/timeline")
 
 
 @app.post("/reblog/<post_id>")
-def reblog_post(post_id) -> str:
+def reblog_post(post_id) -> Union[str, Response]:
     status = mastodon.status_reblog(post_id)
     log_info(status)
     if request.headers.get("Hx-Request", None):
@@ -61,7 +62,7 @@ def reblog_post(post_id) -> str:
 
 
 @app.post("/favorite/<post_id>")
-def favorite_post(post_id) -> str:
+def favorite_post(post_id) -> Union[str, Response]:
     status = mastodon.status_favourite(post_id)
     log_info(status)
     if request.headers.get("Hx-Request", None):
@@ -70,7 +71,7 @@ def favorite_post(post_id) -> str:
 
 
 @app.post("/bookmark/<post_id>")
-def bookmark_post(post_id) -> str:
+def bookmark_post(post_id) -> Union[str, Response]:
     status = mastodon.status_bookmark(post_id)
     log_info(status)
     if request.headers.get("Hx-Request", None):
@@ -86,22 +87,22 @@ def get_content(toot) -> str:
 
 
 @app.template_global("is_reply")
-def is_reply(toot):
+def is_reply(toot) -> bool:
     return toot.in_reply_to_id is not None
 
 
 @app.template_global("is_reblog")
-def is_reblog(toot):
+def is_reblog(toot) -> bool:
     return toot.reblog is not None
 
 
 @app.template_global("get_in_reply_to")
-def get_in_reply_to(toot):
+def get_in_reply_to(toot) -> str:
     original_author_id = toot.in_reply_to_account_id
     original_author = mastodon.account(original_author_id)
     return original_author.display_name
 
 
 @app.route("/")
-def index() -> Any:
+def index() -> Response:
     return redirect("/timeline", code=302)
