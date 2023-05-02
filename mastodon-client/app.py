@@ -1,5 +1,5 @@
 import os
-from typing import Any, Union
+from typing import Union, List, Any
 from logging import info as log_info
 
 from dotenv import load_dotenv
@@ -22,7 +22,7 @@ mastodon.log_in(
     scopes=["read", "write:statuses", "write:favourites", "write:bookmarks"],
 )
 
-running_timeline = []
+running_timeline: List[Any] = []
 
 
 @app.route("/timeline")
@@ -97,7 +97,7 @@ def is_reblog(toot) -> bool:
 
 
 @app.template_global("get_in_reply_to")
-def get_in_reply_to(toot) -> str:
+def get_in_reply_to(toot) -> Any:
     original_author_id = toot.in_reply_to_account_id
     original_author = mastodon.account(original_author_id)
     return original_author.display_name
