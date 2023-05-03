@@ -79,6 +79,11 @@ def bookmark_post(post_id) -> Union[str, Response]:
     return redirect("/timeline")
 
 
+@app.get("/settings")
+def settings() -> str:
+    return render_template("settings.html")
+
+
 @app.template_global("get_content")
 def get_content(toot) -> str:
     if toot.reblog is not None:
