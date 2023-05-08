@@ -1,7 +1,13 @@
 <article>
-    <header>{{ toot.account.display_name }} ({{ toot.account.acct }}) reblogged</header>
+    <header>
+        <img class="avatar" src="{{ toot.account.avatar_static }}" />
+        {{ toot.account.display_name }} ({{ toot.account.acct }}) reblogged
+    </header>
     <article>
-        <header>{{toot.reblog.account.display_name }} ({{ toot.reblog.account.acct }})</header>
+        <header>
+            <img class="avatar" src="{{ toot.reblog.account.avatar_static }}" />
+            {{toot.reblog.account.display_name }} ({{ toot.reblog.account.acct }})
+        </header>
         {% include "_postcontent.html" %}
     </article>
     <footer>

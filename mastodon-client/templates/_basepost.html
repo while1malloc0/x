@@ -1,5 +1,8 @@
 <article>
-    <header>{{ toot.account.display_name }} ({{ toot.account.acct }})</header>
+    <header>
+        <img class="avatar" src="{{ toot.account.avatar_static }}" />
+        {{ toot.account.display_name }} ({{ toot.account.acct }})
+    </header>
     {% include "_postcontent.html" %}
     <footer>
         {% include "_postbuttons.html" %}
