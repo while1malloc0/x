@@ -1,6 +1,10 @@
 {{ get_content(toot) | safe }}
 {% if (toot.reblog.media_attachments | length) > 0 %}
-{% for attachment in toot.reblog.media_attachments %}
+{% set attachments = toot.reblog.media_attachments %}
+{% elif (toot.media_attachments | length) > 0 %}
+{% set attachments = toot.media_attachments %}
+{% endif %}
+
+{% for attachment in attachments %}
 <img src="{{ attachment.url }}" />
 {% endfor %}
-{% endif %}
