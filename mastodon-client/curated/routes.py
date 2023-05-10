@@ -4,7 +4,7 @@ from typing import List, Union, Any
 from flask import render_template, request, redirect
 from werkzeug.wrappers import Response
 
-from . import app, mastodon
+from curated import app, mastodon
 
 
 running_timeline: List[Any] = []

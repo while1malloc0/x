@@ -3,7 +3,7 @@ import os
 from flask import Flask
 from mastodon import Mastodon
 
-from .models import db
+from curated.models import db
 
 
 mastodon = Mastodon(
@@ -20,3 +20,6 @@ mastodon.log_in(
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"
 db.init_app(app)
+
+import curated.routes
+import curated.template_globals
