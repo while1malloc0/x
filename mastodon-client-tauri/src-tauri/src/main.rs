@@ -4,10 +4,9 @@
 )]
 
 use megalodon;
-use megalodon::error::Error;
 
 #[tauri::command(async)]
-async fn greet(name: String) -> Result<String, Error> {
+async fn greet(name: String) -> Result<String, String> {
     let client = megalodon::generator(
         megalodon::SNS::Mastodon,
         String::from("https://hachyderm.io"),
