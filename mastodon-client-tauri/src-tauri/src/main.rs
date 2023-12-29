@@ -3,9 +3,26 @@
     windows_subsystem = "windows"
 )]
 
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello {}!", name)
+use megalodon;
+use megalodon::error::Error;
+
+#[tauri::command(async)]
+async fn greet(name: String) -> Result<String, Error> {
+    let client = megalodon::generator(
+        megalodon::SNS::Mastodon,
+        String::from("https://hachyderm.io"),
+        None,
+        None,
+    );
+    match client.get_instance().await {
+        Ok(res) => {
+            println!("{:#?}", res.json());
+        }
+        Err(e) => {
+            println!("Error retrieving client {}", e)
+        }
+    }
+    Ok(format!("Hello {}", name))
 }
 
 fn main() {
