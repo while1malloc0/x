@@ -1,11 +1,11 @@
 {
-	"id": "sample-plugin",
-	"name": "Sample Plugin",
-	"version": "1.0.0",
+	"id": "self-destructing-notes",
+	"name": "Self Destructing Notes",
+	"version": "0.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Demonstrates some of the capabilities of the Obsidian API.",
-	"author": "Obsidian",
-	"authorUrl": "https://obsidian.md",
+	"description": "Create notes that self destruct after a certain time",
+	"author": "@while1malloc0",
+	"authorUrl": "https://breaking.computer",
 	"fundingUrl": "https://obsidian.md/pricing",
 	"isDesktopOnly": false
 }
