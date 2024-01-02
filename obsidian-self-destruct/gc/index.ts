@@ -1,5 +1,7 @@
 import * as moment from 'moment';
 
+type GCDeleteFn = (item: GCItem) => void;
+
 export interface GCItem {
   deleteAfter: moment.Moment;
   path: string;
@@ -7,9 +9,11 @@ export interface GCItem {
 
 export class GarbageCollector {
   markedForDeletion: GCItem[];
+  deleter: GCDeleteFn;
 
-  constructor() {
+  constructor({ deleter }: { deleter: GCDeleteFn }) {
     this.markedForDeletion = [];
+    this.deleter = deleter;
   }
 
   async mark(items: GCItem[]) {
@@ -18,6 +22,12 @@ export class GarbageCollector {
       if (item.deleteAfter.isBefore(now)) {
         this.markedForDeletion.push(item);
       }
+    })
+  }
+
+  async sweep() {
+    this.markedForDeletion.forEach(item => {
+      this.deleter(item);
     })
   }
 }
