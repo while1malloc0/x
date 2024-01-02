@@ -1,4 +1,4 @@
-import * as moment from 'moment';
+import { moment } from 'obsidian';
 
 type GCDeleteFn = (item: GCItem) => void;
 
@@ -30,4 +30,8 @@ export class GarbageCollector {
       this.deleter(item);
     })
   }
+}
+
+export const noopLogDeleter = (item: GCItem) => {
+  console.debug(item);
 }
