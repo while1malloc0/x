@@ -1,4 +1,6 @@
-import { App, Plugin, PluginSettingTab, Setting, moment } from 'obsidian';
+import { App, Plugin, PluginSettingTab, Setting } from 'obsidian';
+
+const CHECK_INTERVAL = 5 * 1000;
 
 type DeletionInterval = 'Daily' | 'Weekly';
 
@@ -15,7 +17,7 @@ export default class SelfDestructPlugin extends Plugin {
 
 		this.addSettingTab(new SelfDestructSettingsTab(this.app, this));
 
-		this.registerInterval(window.setInterval(() => this.destructNotes(), 5 * 1000));
+		this.registerInterval(window.setInterval(() => this.destructNotes(), CHECK_INTERVAL));
 	}
 
 	async loadSettings() {
@@ -82,15 +84,5 @@ class SelfDestructSettingsTab extends PluginSettingTab {
 
 	hide(): void {
 		console.debug("Hiding plugin settings");
-		this.reloadPluginIfNeeded();
-	}
-
-	reloadPluginIfNeeded(): void {
-		console.debug("Reloading plugin to re-register interval");
-		if (this.needsReload) {
-			this.needsReload = false;
-			this.plugin.unload();
-			this.plugin.load();
-		}
 	}
 }
