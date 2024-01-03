@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
+    "allowSyntheticDefaultImports": true,
     "inlineSourceMap": true,
     "inlineSources": true,
     "module": "ESNext",
@@ -8,6 +9,7 @@
     "allowJs": true,
     "noImplicitAny": true,
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "importHelpers": true,
     "isolatedModules": true,
     "strictNullChecks": true,

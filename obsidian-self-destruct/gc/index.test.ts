@@ -1,5 +1,6 @@
 import { GarbageCollector, GCItem } from './index';
-import * as moment from 'moment';
+
+const moment = require('moment');
 
 describe("GarbageCollector", () => {
   describe("#mark", () => {
