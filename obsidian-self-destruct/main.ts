@@ -1,5 +1,5 @@
-import { App, Plugin, PluginSettingTab, Setting, TFile, TFolder, FileManager } from 'obsidian';
-import { GCItem, GarbageCollector, noopLogDeleter } from 'gc';
+import { GCItem, GarbageCollector } from 'gc';
+import { App, Plugin, PluginSettingTab, Setting, TFile, TFolder } from 'obsidian';
 
 const moment = require('moment');
 
@@ -17,12 +17,16 @@ export default class SelfDestructPlugin extends Plugin {
     console.debug("loaded self-destructing-notes");
     await this.loadSettings();
 
-    this.garbageCollector = new GarbageCollector({ deleter: noopLogDeleter });
+    this.garbageCollector = new GarbageCollector({
+      deleter: async (item: GCItem) => {
+        const file = this.app.vault.getAbstractFileByPath(item.path) as TFile;
+        await this.app.vault.trash(file, false);
+      }
+    });
 
     this.addSettingTab(new SelfDestructSettingsTab(this.app, this));
 
-    this.registerInterval(window.setInterval(() => this.markNotes(), CHECK_INTERVAL));
-    this.registerInterval(window.setInterval(() => this.sweepNotes(), CHECK_INTERVAL));
+    this.registerInterval(window.setInterval(() => this.markAndSweepNotes(), CHECK_INTERVAL));
   }
 
   async loadSettings() {
@@ -43,6 +47,11 @@ export default class SelfDestructPlugin extends Plugin {
   async saveSettings() {
     console.debug("Current settings", this.settings);
     await this.saveData(this.settings);
+  }
+
+  async markAndSweepNotes() {
+    await this.markNotes();
+    await this.sweepNotes();
   }
 
   async markNotes() {

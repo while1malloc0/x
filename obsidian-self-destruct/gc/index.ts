@@ -29,6 +29,7 @@ export class GarbageCollector {
     this.markedForDeletion.forEach(item => {
       this.deleter(item);
     })
+    this.markedForDeletion = [];
   }
 }
 
